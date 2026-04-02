@@ -482,6 +482,25 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:35:34.564Z | Add functionality to track and retrieve message history
+- category: product
+- priority: high
+- goal: Enable users or systems to access historical messages.
+- commit: feat(src/conversations): add method to retrieve message history
+- files changed: ./src/conversations/conversation.service.ts, ./src/conversations/conversation.controller.ts, ./src/conversations/message.interface.ts, ./src/conversations/conversation.entity.ts
+- files deleted: none
+- implementation summary: Added functionality to track and retrieve message history by creating a new service method for fetching messages.
+- review reason: The changes match the blueprint and task requirements, involve relevant files, and carry acceptable risk.
+- notes:
+- Added new service method to fetch message history
+- Updated controller to handle the new endpoint
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: ./src/conversations/conversation.service.ts, ./src/conversations/conversation.controller.ts, ./src/conversations/message.interface.ts, ./src/conversations/conversation.entity.ts
+- Improve developer experience around changed modules: ./src/conversations/conversation.service.ts, ./src/conversations/conversation.controller.ts, ./src/conversations/message.interface.ts, ./src/conversations/conversation.entity.ts
+- Monitor regressions after Add functionality to track and retrieve message history and harden validation where needed
+
 ### 2026-04-02T17:34:14.760Z | Improve Developer Experience Around Changed Modules
 - category: dx
 - priority: high
