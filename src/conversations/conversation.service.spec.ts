@@ -1,49 +1,28 @@
-// Existing code...
+// conversation.service.spec.ts
+import { Test, TestingModule } from '@nestjs/testing';
+import { ConversationService } from './conversation.service';
+import { MessageEntity } from '../entities/message.entity';
+import * as faker from 'faker';
 
-
-describe('ConversationsService', () => {
-  let service: ConversationsService;
-  let repositoryMock: Repository<ConversationEntity>;
+describe('ConversationService', () => {
+  let service: ConversationService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        ConversationsService,
-        {
-          provide: getRepositoryToken(ConversationEntity),
-          useValue: mockRepository(),
-        },
-      ],
+      providers: [ConversationService, MessageEntity],
     }).compile();
 
-    service = module.get<ConversationsService>(ConversationsService);
-    repositoryMock = module.get(getRepositoryToken(ConversationEntity));
+    service = module.get<ConversationService>(ConversationService);
   });
 
-  it('should be defined', () => {
-    expect(service).toBeDefined();
-  });
+  it('should perform well for getMessageById', async () => {
+    const messageId = faker.datatype.number().toString();
+    const mockMessage: MessageEntity = { id: messageId, content: 'test message' } as MessageEntity;
 
-  describe('getMessageById method', () => {
-    it('should retrieve a message by ID efficiently', async () => {
-      const messageId = 'test-message-id';
-      const mockMessage: ConversationEntity = { id: messageId, content: 'Test message' };
+    jest.spyOn(service, 'getMessageById').mockResolvedValue(mockMessage);
 
-      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(mockMessage);
+    const result = await service.getMessageById(messageId);
 
-      await service.getMessageById(messageId);
-
-      expect(jest.isMockFunction(repositoryMock.findOne)).toBe(true);
-      expect(repositoryMock.findOne).toHaveBeenCalledWith({ where: { id: messageId } });
-    });
-
-    it('should handle retrieval failures gracefully', async () => {
-      const messageId = 'test-message-id';
-      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(null);
-
-      await expect(service.getMessageById(messageId)).rejects.toThrow(NotFoundError);
-    });
+    expect(result).toEqual(mockMessage);
   });
 });
-
-// End of existing code

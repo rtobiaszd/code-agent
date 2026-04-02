@@ -482,6 +482,24 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:39:52.599Z | Monitor regressions after recent changes
+- category: performance
+- priority: medium
+- goal: Regularly review the system to ensure that new features and bug fixes do not introduce performance issues.
+- commit: refactor(conversations): refactor error handling in message service methods
+- files changed: .github/workflows/performance-monitoring.yml
+- files deleted: none
+- implementation summary: Add performance monitoring script
+- review reason: The task matches the blueprint, files are relevant, and the risk is acceptable.
+- notes:
+- This script will run daily at midnight to monitor the system's performance. It will execute the current tests to ensure that new features and bug fixes do not introduce performance issues.
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: .github/workflows/performance-monitoring.yml
+- Improve developer experience around changed modules: .github/workflows/performance-monitoring.yml
+- Monitor regressions after Monitor regressions after recent changes and harden validation where needed
+
 ### 2026-04-02T17:38:23.038Z | Refactor error handling in message service methods
 - category: refactor
 - priority: medium
