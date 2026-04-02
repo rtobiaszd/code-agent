@@ -11,14 +11,19 @@ export class ConversationService {
   ) {}
 
   async getMessageHistory(conversationId: string): Promise<MessageEntity[]> {
-    const messages = await this.messageRepository.find({
-      where: { conversationId },
-      order: { createdAt: 'ASC' }});
+    try {
+      const messages = await this.messageRepository.find({
+        where: { conversationId },
+        order: { createdAt: 'ASC' }
+      });
 
-    if (!messages) {
-      throw new NotFoundException('Message history not found');
+      if (!messages) {
+        throw new NotFoundException('Message history not found');
+      }
+
+      return messages;
+    } catch (error) {
+      throw new NotFoundException(`Failed to retrieve message history for conversationId ${conversationId}: ${error.message}`);
     }
-
-    return messages;
   }
 }
