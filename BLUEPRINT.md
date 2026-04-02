@@ -482,6 +482,23 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:33:23.486Z | Add automated tests for conversation entity
+- category: tests
+- priority: high
+- goal: Ensure the TypeScript types and functionality of the conversation entity are working as expected.
+- commit: test(conversations): add automated tests for conversation entity
+- files changed: ./src/conversations/conversation.entity.spec.ts
+- files deleted: none
+- implementation summary: Add automated tests for conversation entity.
+- review reason: The generated code matches the blueprint, task requirements, and is coherent. There are no obvious breakages or risks.
+- notes:
+- Added automated tests for conversation entity to ensure TypeScript types and functionality are working as expected.
+- warnings:
+- none
+- next opportunities:
+- Improve developer experience around changed modules: ./src/conversations/conversation.entity.spec.ts
+- Monitor regressions after Add automated tests for conversation entity and harden validation where needed
+
 ### 2026-04-02T17:28:05.081Z | Add automated tests for message interface, entity, and service
 - category: tests
 - priority: high
