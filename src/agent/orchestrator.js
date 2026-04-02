@@ -243,85 +243,113 @@ async function runAgent() {
       saveMemory(memory);
     }
 
-    const task = pickNextTask(memory);
-    if (!task) {
-      log("⏸️ no valid task available");
-      return;
-    }
+    const maxTasksPerRun = CONFIG.MAX_TASKS_PER_RUN || 10;
+    let executed = 0;
 
-    memory.metrics.iterations += 1;
-    memory.metrics.tasksExecuted += 1;
-    pushHistory(memory, { type: "task_selected", task });
-    saveMemory(memory);
+    while (executed < maxTasksPerRun) {
+      const currentMemory = loadMemory();
 
-    log("🎯 task:", task.title);
-    log("📌 goal:", task.goal);
+      if (!currentMemory.backlog?.length) {
+        const snapshot = buildRepoSnapshot(repoIndex);
+        const backlog = await createBacklog({
+          blueprint,
+          snapshot,
+          memory: currentMemory,
+          branch,
+          repoIndex,
+          config: CONFIG
+        });
 
-    try {
-      const result = await executeTask({ task, blueprint, memory });
-      const commitMessage = result.review.suggested_commit_message || task.commit_message;
-
-      const committed = commitAll(commitMessage);
-      if (committed) {
-        memory.metrics.commits += 1;
+        currentMemory.backlog = backlog.tasks || [];
+        currentMemory.metrics.plannerRuns += 1;
+        saveMemory(currentMemory);
       }
 
-      if (CONFIG.AUTO_PUSH && committed) {
-        pushBranch();
-        memory.metrics.pushes += 1;
+      const task = pickNextTask(currentMemory);
+      if (!task) {
+        log("⏸️ no valid task available, encerrando loop");
+        break;
       }
 
-      memory.accepted.unshift({
-        at: new Date().toISOString(),
-        title: task.title,
-        category: task.category,
-        commit_message: commitMessage
-      });
-      memory.accepted = memory.accepted.slice(0, 300);
-      memory.metrics.lastSuccessAt = new Date().toISOString();
-      rememberSuccess(memory, task, commitMessage);
+      currentMemory.metrics.iterations += 1;
+      currentMemory.metrics.tasksExecuted += 1;
+      pushHistory(currentMemory, { type: "task_selected", task });
+      saveMemory(currentMemory);
 
-      updateMainEvolutionDoc({
-        task,
-        implementation: result.implementation,
-        review: result.review,
-        commitMessage,
-        memory
-      });
+      log("🎯 task:", task.title);
+      log("📌 goal:", task.goal);
 
-      removeTaskFromBacklog(memory, task.id);
-      saveMemory(memory);
+      try {
+        const result = await executeTask({ task, blueprint, memory: currentMemory });
+        const commitMessage =
+          result.review.suggested_commit_message || task.commit_message;
 
-      log("✅ task concluída:", task.title);
-    } catch (error) {
-      rollbackHard();
-      const reason = error?.message || String(error);
-      const decision = registerFailureAndDecide(memory, task, reason, null);
-
-      if (decision.action === "replan") {
-        try {
-          const nextTask = await replanTask({
-            blueprint,
-            task,
-            failureSummary: reason,
-            memory,
-            config: CONFIG
-          });
-
-          memory.backlog = (memory.backlog || []).map((item) => item.id === task.id ? nextTask : item);
-          saveMemory(memory);
-          log("🧠 task replanned:", nextTask.title);
-        } catch (replanError) {
-          debug("replan error:", replanError.message);
-          removeTaskFromBacklog(memory, task.id);
-          saveMemory(memory);
+        const committed = commitAll(commitMessage);
+        if (committed) {
+          currentMemory.metrics.commits += 1;
         }
-      } else if (decision.action === "drop") {
-        removeTaskFromBacklog(memory, task.id);
-        saveMemory(memory);
+
+        if (CONFIG.AUTO_PUSH && committed) {
+          pushBranch();
+          currentMemory.metrics.pushes += 1;
+        }
+
+        currentMemory.accepted.unshift({
+          at: new Date().toISOString(),
+          title: task.title,
+          category: task.category,
+          commit_message: commitMessage
+        });
+        currentMemory.accepted = currentMemory.accepted.slice(0, 300);
+        currentMemory.metrics.lastSuccessAt = new Date().toISOString();
+        rememberSuccess(currentMemory, task, commitMessage);
+
+        updateMainEvolutionDoc({
+          task,
+          implementation: result.implementation,
+          review: result.review,
+          commitMessage,
+          memory: currentMemory
+        });
+
+        removeTaskFromBacklog(currentMemory, task.id);
+        saveMemory(currentMemory);
+
+        log("✅ task concluída:", task.title);
+      } catch (error) {
+        rollbackHard();
+        const reason = error?.message || String(error);
+        const decision = registerFailureAndDecide(currentMemory, task, reason, null);
+
+        if (decision.action === "replan") {
+          try {
+            const nextTask = await replanTask({
+              blueprint,
+              task,
+              failureSummary: reason,
+              memory: currentMemory,
+              config: CONFIG
+            });
+
+            currentMemory.backlog = (currentMemory.backlog || []).map((item) =>
+              item.id === task.id ? nextTask : item
+            );
+            saveMemory(currentMemory);
+            log("🧠 task replanned:", nextTask.title);
+          } catch (replanError) {
+            debug("replan error:", replanError.message);
+            removeTaskFromBacklog(currentMemory, task.id);
+            saveMemory(currentMemory);
+          }
+        } else if (decision.action === "drop") {
+          removeTaskFromBacklog(currentMemory, task.id);
+          saveMemory(currentMemory);
+        }
+
+        log("❌ task failed:", reason);
       }
 
-      log("❌ task failed:", reason);
+      executed += 1;
     }
   } finally {
     releaseLock();
