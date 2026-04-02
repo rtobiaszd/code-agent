@@ -482,6 +482,24 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:41:27.439Z | Improve developer experience around changed modules
+- category: dx
+- priority: low
+- goal: Update documentation and improve tooling to enhance the development experience for existing modules.
+- commit: chore: update README with developer experience improvements
+- files changed: README.md
+- files deleted: none
+- implementation summary: Update README.md to include developer experience improvements and best practices.
+- review reason: The changes align with the task and blueprint. The README updates are relevant and enhance developer experience.
+- notes:
+- Updated README.md to include developer experience improvements and best practices.
+- Added new sections on enhanced code documentation, improved READMEs, and best practices/troubleshooting tips.
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: README.md
+- Monitor regressions after Improve developer experience around changed modules and harden validation where needed
+
 ### 2026-04-02T17:40:50.905Z | Add automated tests for conversation entity
 - category: tests
 - priority: medium
