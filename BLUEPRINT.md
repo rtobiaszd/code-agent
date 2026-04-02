@@ -479,3 +479,24 @@ Na dúvida, o agente deve:
 
 Objetivo final:
 evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
+
+## Auto Evolution Log
+
+### 2026-04-02T17:26:12.902Z | Add TypeScript types for conversational messages
+- category: dx
+- priority: low
+- goal: Introduce TypeScript types to improve code readability and maintainability.
+- commit: feat(dx): add TypeScript types for conversational messages
+- files changed: ./src/conversations/message.interface.ts, ./src/conversations/conversation.entity.ts, ./src/conversations/conversation.service.ts
+- files deleted: none
+- implementation summary: Added TypeScript types for conversational messages
+- review reason: The changes introduce TypeScript types for conversational messages, which improves code readability and maintainability. The files affected are relevant, and the risk is acceptable.
+- notes:
+- Added TypeScript interface for message
+- Updated entity to use the new interface
+- Updated service methods to utilize TypeScript types
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: ./src/conversations/message.interface.ts, ./src/conversations/conversation.entity.ts, ./src/conversations/conversation.service.ts
+- Monitor regressions after Add TypeScript types for conversational messages and harden validation where needed
