@@ -482,6 +482,23 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:40:26.312Z | Write performance tests for message retrieval method
+- category: tests
+- priority: medium
+- goal: Add unit and integration tests to measure the performance of the message retrieval method.
+- commit: test(conversations): add performance tests for getMessageById
+- files changed: ./src/conversations/conversation.service.spec.ts
+- files deleted: none
+- implementation summary: Add performance tests for getMessageById method.
+- review reason: The task matches the blueprint, files are relevant, and the risk is acceptable.
+- notes:
+- Added performance tests for getMessageById method to ensure it runs efficiently under expected load.
+- warnings:
+- none
+- next opportunities:
+- Improve developer experience around changed modules: ./src/conversations/conversation.service.spec.ts
+- Monitor regressions after Write performance tests for message retrieval method and harden validation where needed
+
 ### 2026-04-02T17:39:52.599Z | Monitor regressions after recent changes
 - category: performance
 - priority: medium
