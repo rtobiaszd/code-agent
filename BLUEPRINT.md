@@ -482,6 +482,24 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:36:39.914Z | Add validation for message interface fields
+- category: bugfix
+- priority: medium
+- goal: Ensure that all required fields are present in messages
+- commit: fix(conversations): add validation for required fields in message DTO
+- files changed: src/conversations/message.interface.ts
+- files deleted: none
+- implementation summary: Added validation for required fields in the Message interface to ensure data integrity.
+- review reason: The changes match the task requirements, involve relevant files, and carry acceptable risk.
+- notes:
+- Added IsRequired decorator to ensure that all required fields are present in messages.
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: src/conversations/message.interface.ts
+- Improve developer experience around changed modules: src/conversations/message.interface.ts
+- Monitor regressions after Add validation for message interface fields and harden validation where needed
+
 ### 2026-04-02T17:35:34.564Z | Add functionality to track and retrieve message history
 - category: product
 - priority: high

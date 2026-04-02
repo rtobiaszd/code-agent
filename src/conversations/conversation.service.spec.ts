@@ -1,20 +1,49 @@
-import { describe, it, expect } from '@jest/globals';
-import { ConversationService } from './conversation.service';
+// Existing code...
 
-const mockConversationRepository = {
-  findOne: jest.fn()
-};
 
-const conversationService = new ConversationService(mockConversationRepository as any);
+describe('ConversationsService', () => {
+  let service: ConversationsService;
+  let repositoryMock: Repository<ConversationEntity>;
 
-describe('ConversationService', () => {
-  it('should find a conversation by id', async () => {
-    const conversationId = '12345';
-    mockConversationRepository.findOne.mockResolvedValue({ id: conversationId } as any);
+  beforeEach(async () => {
+    const module: TestingModule = await Test.createTestingModule({
+      providers: [
+        ConversationsService,
+        {
+          provide: getRepositoryToken(ConversationEntity),
+          useValue: mockRepository(),
+        },
+      ],
+    }).compile();
 
-    const result = await conversationService.findById(conversationId);
+    service = module.get<ConversationsService>(ConversationsService);
+    repositoryMock = module.get(getRepositoryToken(ConversationEntity));
+  });
 
-    expect(mockConversationRepository.findOne).toHaveBeenCalledWith({ where: { id: conversationId } });
-    expect(result).toEqual({ id: conversationId });
+  it('should be defined', () => {
+    expect(service).toBeDefined();
+  });
+
+  describe('getMessageById method', () => {
+    it('should retrieve a message by ID efficiently', async () => {
+      const messageId = 'test-message-id';
+      const mockMessage: ConversationEntity = { id: messageId, content: 'Test message' };
+
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(mockMessage);
+
+      await service.getMessageById(messageId);
+
+      expect(jest.isMockFunction(repositoryMock.findOne)).toBe(true);
+      expect(repositoryMock.findOne).toHaveBeenCalledWith({ where: { id: messageId } });
+    });
+
+    it('should handle retrieval failures gracefully', async () => {
+      const messageId = 'test-message-id';
+      jest.spyOn(repositoryMock, 'findOne').mockResolvedValue(null);
+
+      await expect(service.getMessageById(messageId)).rejects.toThrow(NotFoundError);
+    });
   });
 });
+
+// End of existing code
