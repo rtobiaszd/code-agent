@@ -482,6 +482,24 @@ evoluir o OmniFlow com segurança, consistência e melhorias contínuas reais.
 
 ## Auto Evolution Log
 
+### 2026-04-02T17:38:23.038Z | Refactor error handling in message service methods
+- category: refactor
+- priority: medium
+- goal: Ensure consistent and informative error handling across all methods
+- commit: refactor(conversations): refactor error handling in message service methods
+- files changed: src/conversations/conversation.service.ts
+- files deleted: none
+- implementation summary: Refactored error handling in message service methods to ensure consistent and informative error handling across all methods
+- review reason: The refactoring of error handling in the message service methods matches the task, files are relevant, and the risk is acceptable. The code remains coherent, there is no obvious breakage, and no secrets or destructive op
+- notes:
+- Improved error handling makes debugging easier and reduces user frustration.
+- warnings:
+- none
+- next opportunities:
+- Add or expand automated tests for: src/conversations/conversation.service.ts
+- Improve developer experience around changed modules: src/conversations/conversation.service.ts
+- Monitor regressions after Refactor error handling in message service methods and harden validation where needed
+
 ### 2026-04-02T17:37:46.531Z | Write performance tests for message retrieval method
 - category: tests
 - priority: medium
