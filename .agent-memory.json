@@ -15,7 +15,17 @@
     }
   ],
   "accepted": [],
-  "failed": [],
+  "failed": [
+    {
+      "at": "2026-04-02T17:23:42.435Z",
+      "title": "Add TypeScript types for conversational messages",
+      "category": "dx",
+      "reason": "Push falhou: fatal: 'origin' does not appear to be a git repository fatal: Could not read from remote repository. Please make sure you have the correct access rights and the repository exists.",
+      "signature": "001c25fa969ede286ae5b5f2bcad860600d5f81d",
+      "error_signature": "8011ed404fa9bc008f93714f920609dd28df0242",
+      "classification": "unknown"
+    }
+  ],
   "skipped": [],
   "history": [
     {
@@ -34,10 +44,14 @@
       }
     }
   ],
-  "identicalFailureBursts": {},
+  "identicalFailureBursts": {
+    "001c25fa969ede286ae5b5f2bcad860600d5f81d:8011ed404fa9bc008f93714f920609dd28df0242": 1
+  },
   "learned": {
     "successfulTaskSignatures": [],
-    "failedTaskSignatures": [],
+    "failedTaskSignatures": [
+      "001c25fa969ede286ae5b5f2bcad860600d5f81d"
+    ],
     "successfulCommitMessages": [],
     "forbiddenKeywordsObserved": [],
     "lintPatterns": [],
@@ -55,11 +69,11 @@
     "approvals": 0,
     "rejections": 0,
     "applied": 0,
-    "commits": 0,
+    "commits": 1,
     "pushes": 0,
-    "verifyPass": 0,
+    "verifyPass": 2,
     "verifyFail": 0,
-    "testPass": 0,
+    "testPass": 1,
     "testFail": 0,
     "selfHealSuccess": 0,
     "selfHealFail": 0,
@@ -69,6 +83,6 @@
     "installSuccess": 0,
     "installFail": 0,
     "lastSuccessAt": null,
-    "lastErrorAt": null
+    "lastErrorAt": "2026-04-02T17:23:42.435Z"
   }
 }
