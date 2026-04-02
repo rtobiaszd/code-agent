@@ -1,21 +1,20 @@
-// src/conversations/conversation.entity.ts
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Message } from './message.interface';
 
 @Entity()
-export class Conversation {
+export class MessageEntity implements Message {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ type: 'varchar', length: 255 })
+  conversationId: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  sender: string;
 
   @Column('text')
   content: string;
 
   @Column('timestamp')
-  timestamp: Date;
-
-  @Column('integer')
-  senderId: number;
-
-  @Column('integer')
-  receiverId: number;
+  createdAt: Date;
 }

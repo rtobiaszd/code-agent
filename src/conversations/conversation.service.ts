@@ -1,24 +1,24 @@
-// src/conversations/conversation.service.ts
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Conversation } from './conversation.entity';
+import { MessageEntity } from './conversation.entity';
 
 @Injectable()
 export class ConversationService {
   constructor(
-    @InjectRepository(Conversation)
-    private readonly conversationRepository: Repository<Conversation>,
+    @InjectRepository(MessageEntity)
+    private readonly messageRepository: Repository<MessageEntity>,
   ) {}
 
-  async createMessage(message: Message): Promise<Message> {
-    const newMessage = this.conversationRepository.create(message);
-    return await this.conversationRepository.save(newMessage);
-  }
-
-  async getMessages(conversationId: number): Promise<Message[]> {
-    return await this.conversationRepository.find({
+  async getMessageHistory(conversationId: string): Promise<MessageEntity[]> {
+    const messages = await this.messageRepository.find({
       where: { conversationId },
-    });
+      order: { createdAt: 'ASC' }});
+
+    if (!messages) {
+      throw new NotFoundException('Message history not found');
+    }
+
+    return messages;
   }
 }

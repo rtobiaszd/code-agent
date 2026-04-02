@@ -1,8 +1,7 @@
-// src/conversations/message.interface.ts
 export interface Message {
-  id: number;
+  id?: number;
+  conversationId: string;
+  sender: string;
   content: string;
-  timestamp: Date;
-  senderId: number;
-  receiverId: number;
+  createdAt: Date;
 }
